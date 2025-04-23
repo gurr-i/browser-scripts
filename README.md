@@ -2,7 +2,7 @@
 
 A powerful UserScript that automatically skips YouTube ads instantly while maintaining a low detection profile. This tool enhances your YouTube experience by removing intrusive advertisements seamlessly.
 
-![YouTube Ads Skipper](../assets/icons/youtube-ads-skipper.png)
+![YouTube Ads Skipper](./assets/icons/youtube-ads-skipper.png)
 
 ## Features
 
