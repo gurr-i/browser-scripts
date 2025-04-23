@@ -1,4 +1,4 @@
-# Auto Skip YouTube Ads
+# 🕸️ Auto Skip YouTube Ads
 
 A powerful UserScript that automatically skips YouTube ads instantly while maintaining a low detection profile. This tool enhances your YouTube experience by removing intrusive advertisements seamlessly.
 
