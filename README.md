@@ -22,8 +22,8 @@ A powerful UserScript that automatically skips YouTube ads instantly while maint
 
 1. Install a UserScript manager:
    - [Tampermonkey](https://www.tampermonkey.net/) (Recommended)
-   - [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/)
-2. [Click here to install the script](https://raw.githubusercontent.com/gurr-i/browser-scripts/main/scripts/Auto-Skip-YouTube-Ads/AutoSkipYouTubeAds.js)
+   - [Greasemonkey](https://greasyfork.org/en/scripts/533766-auto-skip-youtube-ads-gurveer)
+2. [Click here to install the script](https://greasyfork.org/en/scripts/533766-auto-skip-youtube-ads-gurveer)
 3. Confirm the installation in your UserScript manager
 
 ## Configuration
