@@ -1,439 +1,625 @@
 // ==UserScript==
-// @name               Auto Skip YouTube Ads @ Gurveer
-// @name:ar            تخطي إعلانات YouTube تلقائيًا @ Gurveer
-// @name:bg            Пропускане на YouTube-реклами
-// @name:es            Saltar Automáticamente Anuncios De YouTube @ Gurveer
-// @name:fr            Ignorer Automatiquement Les Publicités YouTube
-// @name:hi            YouTube विज्ञापन स्वचालित रूप से छोड़ें
-// @name:id            Lewati Otomatis Iklan YouTube
-// @name:ja            YouTube 広告を自動スキップ
-// @name:ko            YouTube 광고 자동 건너뛰기
-// @name:nl            YouTube-Advertenties Automatisch Overslaan
-// @name:pt-BR         Pular Automaticamente Anúncios Do YouTube
-// @name:ru            Автоматический Пропуск Рекламы На YouTube
-// @name:vi            Tự Động Bỏ Qua Quảng Cáo YouTube
-// @name:zh-CN         自动跳过 YouTube 广告
-// @name:zh-TW         自動跳過 YouTube 廣告
-// @namespace          https://github.com/gurr-i/browser-scripts
-// @version            8.0.1
-// @description        Automatically skip YouTube ads instantly with minimal detection risk. Features configurable settings, update notifications, robust error handling, and fixes for mute state restoration.
-// @description:ar     تخطي إعلانات YouTube تلقائيًا على الفور مع الحد الأدنى من مخاطر الكشف. يتضمن إعدادات قابلة للتخصيص، إشعارات التحديث، ومعالجة قوية للأخطاء، وإصلاحات لاستعادة حالة كتم الصوت.
-// @description:es     Omite automáticamente los anuncios de YouTube al instante con un riesgo mínimo de detección. Incluye configuraciones personalizables, notificaciones de actualización, manejo robusto de errores y correcciones para la restauración del estado de silencio.
-// @description:fr     Ignorez automatiquement et instantanément les publicités YouTube avec un risque minimal de détection. Comprend des paramètres configurables, des notifications de mise à jour, une gestion robuste des erreurs et des corrections pour la restauration de l'état muet.
-// @description:hi     YouTube विज्ञापनों को तुरंत स्वचालित रूप से छोड़ दें, जिसमें न्यूनतम पता लगाने का जोखिम हो। इसमें कॉन्फ़िगर करने योग्य सेटिंग्स, अपडेट सूचनाएं, मजबूत त्रुटि हैंडलिंग और म्यूट स्थिति बहाली के लिए सुधार शामिल हैं।
-// @description:id     Lewati iklan YouTube secara otomatis secara instan dengan risiko deteksi minimal. Termasuk pengaturan yang dapat dikonfigurasi, pemberitahuan pembaruan, penanganan kesalahan yang kuat, dan perbaikan untuk pemulihan status bisu.
-// @description:ja     YouTube 広告を即座に自動的にスキップし、検出リスクを最小限に抑えます。カスタマイズ可能な設定、更新通知、堅牢なエラーハンドリング、ミュート状態の復元修正を備えています。
-// @description:ko     YouTube 광고를 즉시 자동으로 건너뛰며 탐지 위험이 최소화됩니다。구성 가능한 설정, 업데이트 알림, 강력한 오류 처리 및 음소거 상태 복원 수정이 포함됩니다.
-// @description:nl     Sla YouTube-advertenties direct automatisch over met minimaal detectierisico. Bevat configureerbare instellingen, updatemeldingen, robuuste foutafhandeling en fixes voor het herstellen van de mute-status.
-// @description:pt-BR  Pule anúncios do YouTube instantaneamente com risco mínimo de detecção. Inclui configurações personalizáveis, notificações de atualização, tratamento robusto de erros e correções para restauração do estado de mudo.
-// @description:ru     Автоматически пропускать рекламу YouTube мгновенно с минимальным риском обнаружения. Включает настраиваемые параметры, уведомления об обновлениях, надежную обработку ошибок и исправления для восстановления состояния звука.
-// @description:vi     Tự động bỏ qua quảng cáo YouTube ngay lập tức với rủi ro phát hiện tối thiểu. Bao gồm cài đặt có thể tùy chỉnh, thông báo cập nhật, xử lý lỗi mạnh mẽ và sửa lỗi cho việc khôi phục trạng thái tắt tiếng.
-// @description:zh-CN  立即自动跳过 YouTube 广告，检测风险最小。包括可配置设置、更新通知、强大的错误处理和修复静音状态恢复。
-// @description:zh-TW  立即自動跳過 YouTube 廣告，偵測風險極低。包括可配置設定、更新通知、強大的錯誤處理和修復靜音狀態恢復。
-// @author             Gurveer
-// @icon               https://raw.githubusercontent.com/gurr-i/browser-scripts/main/assets/icons/youtube-ads-skipper.png
-// @match              https://www.youtube.com/*
-// @match              https://m.youtube.com/*
-// @match              https://music.youtube.com/*
-// @exclude            https://studio.youtube.com/*
-// @grant              none
-// @license            MIT
-// @compatible         firefox
-// @compatible         chrome
-// @compatible         opera
-// @compatible         safari
-// @compatible         edge
+// @name         YouTube Ad Skipper @ Gurveer
+// @namespace    https://github.com/gurr-i
+// @version      1.0.0
+// @author       Gurveer (@Gurveer)
+// @description  Instantly skips YouTube ads (skippable & non-skippable) and blocks ad elements. Features: customizable settings, statistics tracking, keyboard shortcuts. © 2025 Gurveer. All rights reserved.
+// @license      All Rights Reserved
+// @copyright    2025, Gurveer (@Gurveer)
+// @icon         https://www.google.com/s2/favicons?domain=youtube.com
+// @match        https://www.youtube.com/*
+// @match        https://m.youtube.com/*
+// @match        https://music.youtube.com/*
+// @exclude      https://studio.youtube.com/*
+// @grant        none
+// @run-at       document-start
 // @noframes
-// @homepage           https://github.com/gurr-i/browser-scripts/tree/main/scripts/Auto-Skip-YouTube-Ads
 // ==/UserScript==
 
 (function () {
-    'use strict';
-  
-    // Configuration settings with UI controls and selectors
-    const defaultConfig = {
-      debug: false,
-      updateCheckInterval: 24 * 60 * 60 * 1000,
-      maxRetries: 3,
-      retryDelay: 1000,
-      randomizationDelay: 200,
-      aggressiveAdRemoval: true,
-      skipOverlayAds: true,
-      skipVideoAds: true,
-      muteAds: true,
-      autoUpdateCheck: true,
-      selectors: {
-        adShowing: '.ad-showing, .ytp-ad-player-overlay',
-        pieCountdown: '.ytp-ad-timed-pie-countdown-container, .ytp-ad-duration-remaining',
-        surveyQuestions: '.ytp-ad-survey-questions, .ytp-ad-survey-interstitial',
-        player: '#ytd-player, #movie_player',
-        mobilePlayer: '#movie_player, #player-container-id',
-        adVideo: '#ytd-player video.html5-main-video, #song-video video.html5-main-video, .video-stream.html5-main-video',
-        skipButton: '.ytp-ad-skip-button, .ytp-ad-skip-button-modern',
-        muteButton: '.ytp-mute-button',
-        ads: [
-          '#player-ads',
-          '#panels > ytd-engagement-panel-section-list-renderer[target-id="engagement-panel-ads"]',
-          '#masthead-ad',
-          '.yt-mealbar-promo-renderer',
-          '.ytp-ad-overlay-container',
-          '.ytp-ad-overlay-slot',
-          '.ytp-ad-text-overlay',
-          '.ytp-ad-preview-text-overlay',
-          '.ytp-ad-preview-container',
-          '.video-ads.ytp-ad-module',
-          '.ytp-featured-product',
-          'ytd-merch-shelf-renderer',
-          'ytmusic-mealbar-promo-renderer',
-          'ytmusic-statement-banner-renderer',
-          '.ytd-promoted-sparkles-web-renderer',
-          '.ytd-display-ad-renderer',
-          '.ytd-statement-banner-renderer',
-          '.ytd-in-feed-ad-layout-renderer',
-        ],
-        adElements: [
-          ['ytd-reel-video-renderer', '.ytd-ad-slot-renderer'],
-          ['tp-yt-paper-dialog', '#feedback.ytd-enforcement-message-view-model'],
-          ['tp-yt-paper-dialog', ':scope > ytd-checkbox-survey-renderer'],
-          ['tp-yt-paper-dialog', ':scope > ytd-single-option-survey-renderer'],
-        ],
-      },
-      githubRepo: 'https://github.com/gurr-i/browser-scripts',
-    };
-  
-    // Load saved configuration or use defaults
-    const config = {
-      ...defaultConfig,
-      ...JSON.parse(localStorage.getItem('AutoSkipYouTubeAds_Config') || '{}'),
-    };
-  
-    // UI Module for settings
-    const settingsUI = {
-      createSettingsPanel() {
-        const panel = document.createElement('div');
-        panel.className = 'auto-skip-settings';
-        panel.style.cssText =
-          'position:fixed;top:10px;right:10px;background:#fff;padding:10px;border-radius:5px;box-shadow:0 2px 10px rgba(0,0,0,0.1);z-index:9999;display:none;';
-  
-        const title = document.createElement('h3');
-        title.textContent = 'Auto Skip Settings';
-        title.style.margin = '0 0 10px';
-        panel.appendChild(title);
-  
-        const settings = [
-          { key: 'debug', label: 'Debug Mode', type: 'checkbox' },
-          { key: 'skipOverlayAds', label: 'Skip Overlay Ads', type: 'checkbox' },
-          { key: 'skipVideoAds', label: 'Skip Video Ads', type: 'checkbox' },
-          { key: 'muteAds', label: 'Mute Ads', type: 'checkbox' },
-          { key: 'aggressiveAdRemoval', label: 'Aggressive Ad Removal', type: 'checkbox' },
-          { key: 'autoUpdateCheck', label: 'Auto Update Check', type: 'checkbox' },
-        ];
-  
-        settings.forEach((setting) => {
-          const container = document.createElement('div');
-          container.style.marginBottom = '5px';
-  
-          const input = document.createElement('input');
-          input.type = setting.type;
-          input.id = `auto-skip-${setting.key}`;
-          input.checked = config[setting.key];
-          input.addEventListener('change', () => {
-            config[setting.key] = input.checked;
-            localStorage.setItem('AutoSkipYouTubeAds_Config', JSON.stringify(config));
-          });
-  
-          const label = document.createElement('label');
-          label.htmlFor = input.id;
-          label.textContent = setting.label;
-          label.style.marginLeft = '5px';
-  
-          container.appendChild(input);
-          container.appendChild(label);
-          panel.appendChild(container);
-        });
-  
-        document.body.appendChild(panel);
-        return panel;
-      },
-  
-      init() {
-        const panel = this.createSettingsPanel();
-        const toggleBtn = document.createElement('button');
-        toggleBtn.textContent = '⚙️';
-        toggleBtn.style.cssText =
-          'position:fixed;top:10px;right:10px;z-index:9999;background:none;border:none;font-size:20px;cursor:pointer;';
-        toggleBtn.addEventListener('click', () => {
-          panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-        });
-        document.body.appendChild(toggleBtn);
-      },
-    };
-  
-    // Environment detection
-    const isYouTubeMobile = location.hostname === 'm.youtube.com';
-    const isYouTubeMusic = location.hostname === 'music.youtube.com';
-    const isYouTubeVideo = !isYouTubeMusic;
-  
-    // Utility module
-    const utils = {
-      log(...args) {
-        if (config.debug) console.log('[AutoSkipYouTubeAds]', ...args);
-      },
-      getCurrentTimeString() {
-        return new Date().toTimeString().split(' ', 1)[0];
-      },
-      checkIsYouTubeShorts() {
-        return location.pathname.startsWith('/shorts/');
-      },
-      randomDelay(max = config.randomizationDelay) {
-        return Math.random() * max;
-      },
-      async sleep(ms) {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-      },
-    };
-  
-    // Ad hiding module
-    const adHider = {
-      addCss() {
-        const validSelectors = config.selectors.ads.filter((selector) =>
-          /^[a-zA-Z0-9\-#.>[\]=:,\s]+$/.test(selector)
-        );
-        if (!validSelectors.length) return;
-        const css = `${validSelectors.join(',')} { display: none !important; }`;
-        const style = document.createElement('style');
-        style.textContent = css;
-        document.head.appendChild(style);
-        utils.log('CSS styles applied for ad hiding');
-      },
-      removeAdElements() {
-        try {
-          if (!config.aggressiveAdRemoval) return;
-          for (const [parentSelector, childSelector] of config.selectors.adElements) {
-            const parent = document.querySelector(parentSelector);
-            if (!parent) continue;
-            const child = parent.querySelector(childSelector);
-            if (!child) continue;
-            parent.remove();
-            utils.log(`Removed ad element: ${parentSelector} > ${childSelector}`);
-          }
-        } catch (error) {
-          console.error('Error removing ad elements:', error);
-        }
-      },
-    };
-  
-    // Ad skipping module with enhanced mute state handling
-    const adSkipper = {
-      wasVideoMuted: null, // Store original mute state (null if not set)
-  
-      async restoreMuteState(player) {
-        try {
-          if (this.wasVideoMuted === null) return; // No mute state to restore
-          const isMuted = player.isMuted?.() ?? false;
-          if (isMuted !== this.wasVideoMuted) {
-            if (this.wasVideoMuted) {
-              player.mute?.();
-            } else {
-              player.unMute?.();
-            }
-            utils.log(`Restored mute state to: ${this.wasVideoMuted ? 'muted' : 'unmuted'}`);
-          }
-        } catch (error) {
-          console.error('Error restoring mute state:', error);
-        }
-      },
-  
-      async skipAd(retryCount = 0) {
-        try {
-          if (utils.checkIsYouTubeShorts()) return;
-  
-          const adShowing = document.querySelector(config.selectors.adShowing);
-          const pieCountdown = document.querySelector(config.selectors.pieCountdown);
-          const surveyQuestions = document.querySelector(config.selectors.surveyQuestions);
-          const skipButton = document.querySelector(config.selectors.skipButton);
-  
-          const playerSelector = isYouTubeMobile || isYouTubeMusic ? config.selectors.mobilePlayer : config.selectors.player;
-          const playerEl = document.querySelector(playerSelector);
-          const player = isYouTubeMobile || isYouTubeMusic ? playerEl : playerEl?.getPlayer?.();
-  
-          if (!playerEl || !player) {
-            utils.log({ message: 'Player not found', timeStamp: utils.getCurrentTimeString() });
-            if (retryCount < config.maxRetries) {
-              await utils.sleep(config.retryDelay);
-              return this.skipAd(retryCount + 1);
-            }
-            return;
-          }
-  
-          // Check if no ad is showing and restore mute state
-          if (!adShowing && !pieCountdown && !surveyQuestions && !skipButton) {
-            if (config.muteAds) {
-              await this.restoreMuteState(player);
-            }
-            return;
-          }
-  
-          // Try to click skip button first if available
-          if (skipButton && config.skipVideoAds) {
-            skipButton.click();
-            utils.log({ message: 'Skip button clicked', timeStamp: utils.getCurrentTimeString() });
-            // Schedule mute state restoration after skip
-            if (config.muteAds) {
-              await utils.sleep(500); // Wait for video to load
-              await this.restoreMuteState(player);
-            }
-            return;
-          }
-  
-          // Store original mute state before muting ads
-          if (config.muteAds && this.wasVideoMuted === null) {
-            this.wasVideoMuted = player.isMuted?.() ?? false;
-            utils.log(`Stored original mute state: ${this.wasVideoMuted ? 'muted' : 'unmuted'}`);
-          }
-  
-          // Mute ads if enabled
-          if (config.muteAds && !player.isMuted?.()) {
-            player.mute?.();
-            utils.log('Ad muted');
-          }
-  
-          let adVideo = null;
-          if (!pieCountdown && !surveyQuestions) {
-            adVideo = document.querySelector(config.selectors.adVideo);
-            if (!adVideo || !adVideo.src || adVideo.paused || isNaN(adVideo.duration)) {
-              utils.log('Invalid ad video state');
-              return;
-            }
-            utils.log({ message: 'Ad video detected', timeStamp: utils.getCurrentTimeString() });
-          }
-  
-          // Simulate user-like behavior with random delay
-          await utils.sleep(utils.randomDelay());
-  
-          if (isYouTubeMusic && adVideo) {
-            adVideo.currentTime = adVideo.duration;
-            utils.log({
-              message: 'Ad skipped (YouTube Music)',
-              timeStamp: utils.getCurrentTimeString(),
-              adShowing: !!adShowing,
-              pieCountdown: !!pieCountdown,
-              surveyQuestions: !!surveyQuestions,
-            });
-            // Schedule mute state restoration
-            if (config.muteAds) {
-              await utils.sleep(500); // Wait for video to load
-              await this.restoreMuteState(player);
-            }
-          } else {
-            const videoData = player.getVideoData?.() || {};
-            const videoId = videoData.video_id;
-            if (!videoId) {
-              utils.log('Video ID not found');
-              if (retryCount < config.maxRetries) {
-                await utils.sleep(config.retryDelay);
-                return this.skipAd(retryCount + 1);
-              }
-              return;
-            }
-            const start = Math.floor(player.getCurrentTime?.() || 0);
-            const loadMethod = playerEl.loadVideoWithPlayerVars ? 'loadVideoWithPlayerVars' : 'loadVideoByPlayerVars';
-            playerEl[loadMethod]?.({ videoId, start });
-            utils.log({
-              message: 'Ad skipped',
-              videoId,
-              start,
-              title: videoData.title || 'Unknown',
-              timeStamp: utils.getCurrentTimeString(),
-              adShowing: !!adShowing,
-              pieCountdown: !!pieCountdown,
-              surveyQuestions: !!surveyQuestions,
-            });
-            // Schedule mute state restoration
-            if (config.muteAds) {
-              await utils.sleep(500); // Wait for video to load
-              await this.restoreMuteState(player);
-            }
-          }
-        } catch (error) {
-          console.error('Error in skipAd:', error);
-          if (retryCount < config.maxRetries) {
-            await utils.sleep(config.retryDelay);
-            return this.skipAd(retryCount + 1);
-          }
-        }
-      },
-  
-      setupObserver() {
-        const observer = new MutationObserver((mutations) => {
-          if (
-            mutations.some(
-              (mutation) =>
-                mutation.target.matches(config.selectors.adShowing) ||
-                mutation.target.querySelector(config.selectors.adShowing)
-            )
-          ) {
-            this.skipAd();
-          }
-        });
-        observer.observe(document.body, {
-          attributes: true,
-          attributeFilter: ['class'],
-          childList: true,
-          subtree: true,
-        });
-        utils.log('MutationObserver initialized');
-        return observer;
-      },
-    };
-  
-    // Update checker module
-    const updater = {
-      async checkForUpdates() {
-        try {
-          const lastCheck = localStorage.getItem('AutoSkipYouTubeAds_LastUpdateCheck');
-          const now = Date.now();
-          if (lastCheck && now - parseInt(lastCheck) < config.updateCheckInterval) return;
-  
-          const response = await fetch('https://api.github.com/repos/gurr-i/browser-scripts/releases/latest', {
-            headers: { Accept: 'application/vnd.github.v3+json' },
-          });
-          const data = await response.json();
-          if (data.tag_name && data.tag_name > '8.0.1') {
-            const message = `Auto Skip YouTube Ads: New version ${data.tag_name} available! Update at ${config.githubRepo}`;
-            console.warn(message);
-            if (Notification.permission === 'granted') {
-              new Notification(message);
-            } else if (Notification.permission !== 'denied') {
-              Notification.requestPermission().then((permission) => {
-                if (permission === 'granted') new Notification(message);
-              });
-            }
-          }
-          localStorage.setItem('AutoSkipYouTubeAds_LastUpdateCheck', now.toString());
-        } catch (error) {
-          utils.log('Update check failed:', error);
-        }
-      },
-    };
-  
-    // Initialize script
-    function init() {
-      settingsUI.init();
-      adHider.addCss();
-      if (isYouTubeVideo && config.aggressiveAdRemoval) {
-        adHider.removeAdElements();
-        adSkipper.setupObserver();
+  'use strict';
+
+  /**
+   * YouTube Ad Skipper
+   * 
+   * @author Gurveer (@Gurveer)
+   * @version 1.0.0
+   * @license All Rights Reserved
+   * @copyright 2025 Gurveer. All rights reserved.
+   * 
+   * This script automatically skips YouTube ads and blocks ad elements.
+   * Features:
+   * - Instant ad skipping (skippable and non-skippable)
+   * - Interface ad blocking
+   * - Customizable settings
+   * - Statistics tracking
+   * - Keyboard shortcuts (Ctrl+Shift+A for settings, Ctrl+Shift+S for stats)
+   */
+  (function() {
+    function loadSettings() {
+      try {
+        const saved = localStorage.getItem("ytAdSkipperSettings");
+        return saved ? JSON.parse(saved) : {};
+      } catch (e) {
+        return {};
       }
-      if (config.skipVideoAds || config.skipOverlayAds) {
-        adSkipper.skipAd();
-      }
-      if (config.autoUpdateCheck) {
-        updater.checkForUpdates();
-      }
-      utils.log('Auto Skip YouTube Ads initialized with settings:', config);
     }
-  
-    // Run initialization
-    init();
+    let videoPlayer;
+    let originalVolume = 1;
+    let originalMuted = false;
+    let adStats = {
+      blocked: 0,
+      skipped: 0,
+      sessionStart: Date.now()
+    };
+    let lastAdSkipTime = 0;
+    let adSkipCooldown = 2e3;
+    const settings = {
+      autoUnmute: true,
+      speedUpAds: false,
+      // Disabled by default for better compatibility
+      showStats: true,
+      showNotifications: true,
+      debugMode: false,
+      // Disabled in production
+      ...loadSettings()
+    };
+    const adSelectors = [
+      "#masthead-ad",
+      "ytd-rich-item-renderer.style-scope.ytd-rich-grid-row #content:has(.ytd-display-ad-renderer)",
+      ".video-ads.ytp-ad-module",
+      "tp-yt-paper-dialog:has(yt-mealbar-promo-renderer)",
+      'ytd-engagement-panel-section-list-renderer[target-id="engagement-panel-ads"]',
+      "#related #player-ads",
+      "#related ytd-ad-slot-renderer",
+      "ytd-ad-slot-renderer",
+      "ytd-in-feed-ad-layout-renderer",
+      "yt-mealbar-promo-renderer",
+      'ytd-popup-container:has(a[href="/premium"])',
+      "ad-slot-renderer",
+      "ytm-companion-ad-renderer",
+      ".ytp-ad-overlay-container",
+      ".ytp-ad-text-overlay"
+    ];
+    window.debugMode = settings.debugMode;
+    function formatDate(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      const seconds = String(date.getSeconds()).padStart(2, "0");
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+    function debugLog(message) {
+      if (!window.debugMode) return;
+      console.log(`[Ad Skipper] ${formatDate(/* @__PURE__ */ new Date())} - ${message}`);
+    }
+    function saveSettings() {
+      try {
+        localStorage.setItem("ytAdSkipperSettings", JSON.stringify(settings));
+      } catch (e) {
+        debugLog("Failed to save settings: " + e.message);
+      }
+    }
+    function showNotification(message, duration = 3e3) {
+      if (!settings.showNotifications) return;
+      if (!document.getElementById("michroma-font")) {
+        const fontLink = document.createElement("link");
+        fontLink.id = "michroma-font";
+        fontLink.rel = "stylesheet";
+        fontLink.href = "https://fonts.googleapis.com/css2?family=Michroma&display=swap";
+        document.head.appendChild(fontLink);
+      }
+      const notification = document.createElement("div");
+      notification.style.cssText = `
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-family: 'Michroma', sans-serif;
+    font-size: 13px;
+    z-index: 999998;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px);
+    animation: slideIn 0.3s ease-out;
+  `;
+      notification.textContent = message;
+      const style = document.createElement("style");
+      style.textContent = `
+    @keyframes slideIn {
+      from { transform: translateX(400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+  `;
+      document.head.appendChild(style);
+      document.body.appendChild(notification);
+      setTimeout(() => {
+        notification.style.animation = "slideIn 0.3s ease-out reverse";
+        setTimeout(() => notification.remove(), 300);
+      }, duration);
+    }
+    function saveVideoState() {
+      if (videoPlayer && !videoPlayer.classList.contains("ad-showing")) {
+        originalVolume = videoPlayer.volume;
+        originalMuted = videoPlayer.muted;
+        debugLog(`Saved video state: volume=${originalVolume}, muted=${originalMuted}`);
+      }
+    }
+    function restoreVideoState() {
+      if (videoPlayer && settings.autoUnmute) {
+        videoPlayer.volume = originalVolume;
+        videoPlayer.muted = originalMuted;
+        debugLog("Restored video state");
+      }
+    }
+    function updateStats() {
+      if (!settings.showStats) return;
+      if (!document.getElementById("michroma-font")) {
+        const fontLink = document.createElement("link");
+        fontLink.id = "michroma-font";
+        fontLink.rel = "stylesheet";
+        fontLink.href = "https://fonts.googleapis.com/css2?family=Michroma&display=swap";
+        document.head.appendChild(fontLink);
+      }
+      let statsDiv = document.getElementById("yt-ad-skipper-stats");
+      if (!statsDiv) {
+        statsDiv = document.createElement("div");
+        statsDiv.id = "yt-ad-skipper-stats";
+        statsDiv.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.41);
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-family: 'Michroma', sans-serif;
+      font-size: 11px;
+      z-index: 999997;
+      min-width: 160px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.39);
+      backdrop-filter: blur(10px);
+    `;
+        document.body.appendChild(statsDiv);
+      }
+      const sessionTime = Math.floor((Date.now() - adStats.sessionStart) / 6e4);
+      statsDiv.textContent = "";
+      const title = document.createElement("div");
+      title.style.cssText = "font-weight: bold; margin-bottom: 8px; font-size: 10px; letter-spacing: 0.5px;";
+      title.textContent = "🛡️ Ad Skipper @Gurveer";
+      const blocked = document.createElement("div");
+      blocked.style.cssText = "margin: 4px 0; letter-spacing: 0.3px; font-size: 8px;";
+      blocked.textContent = `Blocked: ${adStats.blocked}`;
+      const skipped = document.createElement("div");
+      skipped.style.cssText = "margin: 4px 0; letter-spacing: 0.3px; font-size: 8px;";
+      skipped.textContent = `Skipped: ${adStats.skipped}`;
+      const session = document.createElement("div");
+      session.style.cssText = "margin: 4px 0; letter-spacing: 0.3px; font-size: 8px;";
+      session.textContent = `Session: ${sessionTime}m`;
+      statsDiv.appendChild(title);
+      statsDiv.appendChild(blocked);
+      statsDiv.appendChild(skipped);
+      statsDiv.appendChild(session);
+    }
+    function setExecutionFlag(flagId) {
+      const style = document.createElement("style");
+      style.id = flagId;
+      (document.head || document.body).appendChild(style);
+    }
+    function getExecutionFlag(flagId) {
+      return document.getElementById(flagId);
+    }
+    function hasExecutionFlag(flagId) {
+      if (getExecutionFlag(flagId)) {
+        return true;
+      }
+      setExecutionFlag(flagId);
+      return false;
+    }
+    function createAdBlockStyle(flagId) {
+      if (hasExecutionFlag(flagId)) {
+        debugLog("Ad-blocking style already applied");
+        return;
+      }
+      const style = document.createElement("style");
+      (document.head || document.body).appendChild(style);
+      style.appendChild(document.createTextNode(generateAdBlockCss(adSelectors)));
+      const blockedAds = document.querySelectorAll(adSelectors.join(","));
+      adStats.blocked = blockedAds.length;
+      updateStats();
+      debugLog("Ad-blocking style applied successfully");
+    }
+    function generateAdBlockCss(selectors) {
+      return selectors.map((selector) => `${selector}{display:none!important}`).join(" ");
+    }
+    function simulateTouch() {
+      try {
+        const touch = new Touch({
+          identifier: Date.now(),
+          target: this,
+          clientX: 12,
+          clientY: 34,
+          radiusX: 56,
+          radiusY: 78,
+          rotationAngle: 0,
+          force: 1
+        });
+        const touchStart = new TouchEvent("touchstart", {
+          bubbles: true,
+          cancelable: true,
+          view: window,
+          touches: [touch],
+          targetTouches: [touch],
+          changedTouches: [touch]
+        });
+        this.dispatchEvent(touchStart);
+        const touchEnd = new TouchEvent("touchend", {
+          bubbles: true,
+          cancelable: true,
+          view: window,
+          touches: [],
+          targetTouches: [],
+          changedTouches: [touch]
+        });
+        this.dispatchEvent(touchEnd);
+      } catch (e) {
+        debugLog("Touch simulation failed: " + e.message);
+      }
+    }
+    function fetchVideoElement() {
+      videoPlayer = document.querySelector(".ad-showing video") || document.querySelector(".html5-main-video") || document.querySelector("video.video-stream") || document.querySelector("video");
+      if (videoPlayer) {
+        debugLog("Video element found: " + videoPlayer.className);
+      } else {
+        debugLog("No video element found");
+      }
+    }
+    function resumePlayback() {
+      if ((videoPlayer == null ? void 0 : videoPlayer.paused) && videoPlayer.currentTime < 1) {
+        videoPlayer.play();
+        debugLog("Resumed video playback");
+      }
+    }
+    function clearOverlay() {
+      const premiumPopups = [...document.querySelectorAll("ytd-popup-container")];
+      const targetPopups = premiumPopups.filter((popup) => popup.querySelector('a[href="/premium"]'));
+      if (targetPopups.length > 0) {
+        targetPopups.forEach((popup) => popup.remove());
+        debugLog("Removed ad blocker popup");
+      }
+      const backdrops = document.querySelectorAll("tp-yt-iron-overlay-backdrop");
+      const targetBackdrop = Array.from(backdrops).find((backdrop) => backdrop.style.zIndex === "2201");
+      if (targetBackdrop) {
+        targetBackdrop.className = "";
+        targetBackdrop.removeAttribute("opened");
+        debugLog("Closed overlay backdrop");
+      }
+    }
+    function bypassAd() {
+      if (!videoPlayer) {
+        debugLog("bypassAd: No video player");
+        return;
+      }
+      const skipBtn = document.querySelector(".ytp-ad-skip-button") || document.querySelector(".ytp-skip-ad-button") || document.querySelector(".ytp-ad-skip-button-modern");
+      const shortAd = document.querySelector(".video-ads.ytp-ad-module .ytp-ad-player-overlay") || document.querySelector(".ytp-ad-button-icon");
+      const adShowing = videoPlayer.classList.contains("ad-showing");
+      const adInterrupting = videoPlayer.classList.contains("ad-interrupting");
+      const adPlaying = document.querySelector(".ad-showing");
+      const isAdPlaying = skipBtn || shortAd || adShowing || adInterrupting || adPlaying;
+      if (isAdPlaying) {
+        const now = Date.now();
+        if (now - lastAdSkipTime < adSkipCooldown) {
+          return;
+        }
+        debugLog(`AD DETECTED! Skip: ${!!skipBtn}, Short: ${!!shortAd}, Showing: ${adShowing}, Interrupting: ${adInterrupting}, AdPlaying: ${!!adPlaying}`);
+        if (!videoPlayer.dataset.adStateSaved) {
+          saveVideoState();
+          videoPlayer.dataset.adStateSaved = "true";
+          debugLog("Saved video state");
+        }
+        if (!window.location.href.includes("https://m.youtube.com/")) {
+          if (!videoPlayer.muted) {
+            videoPlayer.muted = true;
+            debugLog("Muted ad");
+          }
+        }
+        if (settings.speedUpAds && videoPlayer.playbackRate < 16) {
+          videoPlayer.playbackRate = 16;
+          debugLog("Sped up ad to 16x");
+        }
+        if (skipBtn) {
+          debugLog("Clicking skip button...");
+          skipBtn.click();
+          simulateTouch.call(skipBtn);
+          adStats.skipped++;
+          updateStats();
+          showNotification("⚡ Ad skipped!", 2e3);
+          debugLog("Clicked skip ad button");
+          lastAdSkipTime = now;
+          if (videoPlayer.duration && videoPlayer.duration > 0) {
+            videoPlayer.currentTime = videoPlayer.duration - 0.1;
+            debugLog("Force-ended skippable ad");
+          }
+        } else if (videoPlayer.duration && videoPlayer.duration > 0 && !isNaN(videoPlayer.duration)) {
+          debugLog(`Forcing ad end: current=${videoPlayer.currentTime}, duration=${videoPlayer.duration}`);
+          videoPlayer.currentTime = videoPlayer.duration - 0.1;
+          adStats.skipped++;
+          updateStats();
+          showNotification("⚡ Ad skipped!", 2e3);
+          debugLog("Force-ended non-skippable ad");
+          lastAdSkipTime = now;
+        }
+      } else {
+        if (videoPlayer.dataset.adStateSaved) {
+          if (videoPlayer.playbackRate > 1) {
+            videoPlayer.playbackRate = 1;
+            debugLog("Restored playback rate");
+          }
+          restoreVideoState();
+          delete videoPlayer.dataset.adStateSaved;
+          debugLog("Restored video state - ad ended");
+        }
+      }
+    }
+    function checkAndSkipAds() {
+      try {
+        fetchVideoElement();
+        clearOverlay();
+        bypassAd();
+        resumePlayback();
+      } catch (error) {
+        debugLog("Error in ad blocker: " + error.message);
+      }
+    }
+    function blockPlayerAds(flagId) {
+      if (hasExecutionFlag(flagId)) {
+        debugLog("Player ad blocker already running");
+        return;
+      }
+      const target = document.body;
+      const config = { childList: true, subtree: true };
+      const observer = new MutationObserver(checkAndSkipAds);
+      observer.observe(target, config);
+      debugLog("Player ad blocker started successfully");
+      setInterval(checkAndSkipAds, 2e3);
+    }
+    function createSettingsPanel() {
+      if (!document.getElementById("michroma-font")) {
+        const fontLink = document.createElement("link");
+        fontLink.id = "michroma-font";
+        fontLink.rel = "stylesheet";
+        fontLink.href = "https://fonts.googleapis.com/css2?family=Michroma&display=swap";
+        document.head.appendChild(fontLink);
+      }
+      const backdrop = document.createElement("div");
+      backdrop.id = "yt-ad-skipper-backdrop";
+      backdrop.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999998;
+    display: none;
+    backdrop-filter: blur(5px);
+  `;
+      document.body.appendChild(backdrop);
+      const panel = document.createElement("div");
+      panel.id = "yt-ad-skipper-settings";
+      panel.style.cssText = `
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    padding: 24px;
+    border-radius: 12px;
+    font-family: 'Michroma', sans-serif;
+    z-index: 999999;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    backdrop-filter: blur(10px);
+    display: none;
+    min-width: 320px;
+    max-width: 420px;
+  `;
+      const title = document.createElement("h3");
+      title.style.cssText = "margin: 0 0 20px 0; font-size: 16px; letter-spacing: 1px; text-align: center;";
+      title.textContent = "⚙️ Ad Skipper Settings";
+      panel.appendChild(title);
+      const options = [
+        { id: "autoUnmute", label: "Auto-unmute after ads", checked: settings.autoUnmute },
+        { id: "speedUpAds", label: "Speed up ads (16x)", checked: settings.speedUpAds },
+        { id: "showStats", label: "Show statistics", checked: settings.showStats },
+        { id: "showNotifications", label: "Show notifications", checked: settings.showNotifications },
+        { id: "debugMode", label: "Debug mode", checked: settings.debugMode }
+      ];
+      options.forEach((opt) => {
+        const label = document.createElement("label");
+        label.style.cssText = "display: block; margin: 12px 0; cursor: pointer; font-size: 11px; letter-spacing: 0.3px;";
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = opt.id;
+        checkbox.checked = opt.checked;
+        checkbox.style.cssText = "margin-right: 8px; cursor: pointer;";
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(" " + opt.label));
+        panel.appendChild(label);
+      });
+      const saveBtn = document.createElement("button");
+      saveBtn.id = "saveSettings";
+      saveBtn.textContent = "Save Settings";
+      saveBtn.style.cssText = `
+    margin-top: 20px;
+    padding: 10px 18px;
+    background: rgba(255, 0, 0, 0.8);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Michroma', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    width: 100%;
+    transition: background 0.3s ease;
+  `;
+      saveBtn.onmouseover = () => saveBtn.style.background = "rgba(255, 0, 0, 1)";
+      saveBtn.onmouseout = () => saveBtn.style.background = "rgba(255, 0, 0, 0.8)";
+      panel.appendChild(saveBtn);
+      const closeBtn = document.createElement("button");
+      closeBtn.id = "closeSettings";
+      closeBtn.textContent = "Close";
+      closeBtn.style.cssText = `
+    margin-top: 10px;
+    padding: 10px 18px;
+    background: rgba(96, 96, 96, 0.8);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Michroma', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    width: 100%;
+    transition: background 0.3s ease;
+  `;
+      closeBtn.onmouseover = () => closeBtn.style.background = "rgba(96, 96, 96, 1)";
+      closeBtn.onmouseout = () => closeBtn.style.background = "rgba(96, 96, 96, 0.8)";
+      panel.appendChild(closeBtn);
+      document.body.appendChild(panel);
+      const closePanel = () => {
+        panel.style.display = "none";
+        backdrop.style.display = "none";
+      };
+      saveBtn.addEventListener("click", () => {
+        settings.autoUnmute = document.getElementById("autoUnmute").checked;
+        settings.speedUpAds = document.getElementById("speedUpAds").checked;
+        settings.showStats = document.getElementById("showStats").checked;
+        settings.showNotifications = document.getElementById("showNotifications").checked;
+        settings.debugMode = document.getElementById("debugMode").checked;
+        window.debugMode = settings.debugMode;
+        saveSettings();
+        showNotification("✅ Settings saved!");
+        closePanel();
+        if (!settings.showStats) {
+          const statsDiv = document.getElementById("yt-ad-skipper-stats");
+          if (statsDiv) statsDiv.remove();
+        } else {
+          updateStats();
+        }
+      });
+      closeBtn.addEventListener("click", closePanel);
+      backdrop.addEventListener("click", closePanel);
+    }
+    function addKeyboardShortcuts() {
+      document.addEventListener("keydown", (e) => {
+        if (e.ctrlKey && e.shiftKey && e.key === "A") {
+          e.preventDefault();
+          const panel = document.getElementById("yt-ad-skipper-settings");
+          const backdrop = document.getElementById("yt-ad-skipper-backdrop");
+          if (panel && backdrop) {
+            const isVisible = panel.style.display !== "none";
+            panel.style.display = isVisible ? "none" : "block";
+            backdrop.style.display = isVisible ? "none" : "block";
+          }
+        }
+        if (e.ctrlKey && e.shiftKey && e.key === "S") {
+          e.preventDefault();
+          settings.showStats = !settings.showStats;
+          saveSettings();
+          if (settings.showStats) {
+            updateStats();
+            showNotification("📊 Stats enabled");
+          } else {
+            const statsDiv = document.getElementById("yt-ad-skipper-stats");
+            if (statsDiv) statsDiv.remove();
+            showNotification("📊 Stats disabled");
+          }
+        }
+      });
+    }
+    function initialize() {
+      debugLog("========================================");
+      debugLog("Initializing YouTube Ad Skipper v1.0.0");
+      debugLog("Author: Gurveer (@Gurveer)");
+      debugLog("========================================");
+      createAdBlockStyle("adBlockStyle");
+      blockPlayerAds("playerAdBlock");
+      createSettingsPanel();
+      addKeyboardShortcuts();
+      updateStats();
+      setTimeout(checkAndSkipAds, 1e3);
+      setInterval(() => {
+        if (settings.showStats) {
+          const blockedAds = document.querySelectorAll(adSelectors.join(","));
+          adStats.blocked = blockedAds.length;
+          updateStats();
+        }
+      }, 5e3);
+      debugLog("YouTube Ad Skipper initialized successfully");
+      debugLog("Press Ctrl+Shift+A to open settings");
+      showNotification("🛡️ Ad Skipper Active", 3e3);
+    }
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initialize);
+      debugLog("YouTube ad skipper scheduled");
+    } else {
+      initialize();
+    }
+    function resumeAndClear() {
+      const video = document.querySelector("video.html5-main-video");
+      if (video == null ? void 0 : video.paused) {
+        video.play();
+        debugLog("Resumed paused video");
+      }
+    }
+    function clearPopup(node) {
+      var _a, _b;
+      try {
+        const popup = (_a = node.querySelector) == null ? void 0 : _a.call(node, ".ytd-popup-container .ytd-enforcement-message-view-model");
+        if (popup && popup.parentNode) {
+          popup.parentNode.remove();
+          debugLog("Removed popup element");
+          const backdrops = document.getElementsByTagName("tp-yt-iron-overlay-backdrop");
+          for (let i = backdrops.length - 1; i >= 0; i--) {
+            backdrops[i].remove();
+          }
+          resumeAndClear();
+        }
+        if (((_b = node.tagName) == null ? void 0 : _b.toLowerCase()) === "tp-yt-iron-overlay-backdrop") {
+          node.remove();
+          debugLog("Removed backdrop element");
+          resumeAndClear();
+        }
+      } catch (error) {
+        debugLog("Error clearing popup: " + error.message);
+      }
+    }
+    const popupObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === "childList") {
+          Array.from(mutation.addedNodes).filter((node) => node.nodeType === 1).forEach((node) => clearPopup(node));
+        }
+      });
+    });
+    if (document.body) {
+      popupObserver.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    } else {
+      document.addEventListener("DOMContentLoaded", () => {
+        popupObserver.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      });
+    }
   })();
+
+})();
