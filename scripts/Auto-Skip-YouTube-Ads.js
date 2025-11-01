@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Ad Skipper @ Gurveer
-// @namespace    https://github.com/gurr-i
-// @version      1.0.0
+// @namespace    https://github.com/gurr-i/browser-scripts
+// @version      9.0.0
 // @author       Gurveer (@Gurveer)
 // @description  Instantly skips YouTube ads (skippable & non-skippable) and blocks ad elements. Features: customizable settings, statistics tracking, keyboard shortcuts. © 2025 Gurveer. All rights reserved.
 // @license      All Rights Reserved
@@ -15,10 +15,10 @@
 // @run-at       document-start
 // @noframes
 // ==/UserScript==
-
+ 
 (function () {
   'use strict';
-
+ 
   /**
    * YouTube Ad Skipper
    * 
@@ -621,5 +621,5 @@
       });
     }
   })();
-
+ 
 })();
