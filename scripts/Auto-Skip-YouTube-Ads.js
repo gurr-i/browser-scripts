@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Ad Skipper @ Gurveer
-// @namespace    https://github.com/gurr-i/browser-scripts
-// @version      9.0.0
+// @namespace    https://github.com/gurveeer/browser-scripts/edit/master/scripts/Auto-Skip-YouTube-Ads.js
+// @version      9.0.1
 // @author       Gurveer (@Gurveer)
 // @description  Instantly skips YouTube ads (skippable & non-skippable) and blocks ad elements. Features: customizable settings, statistics tracking, keyboard shortcuts. © 2025 Gurveer. All rights reserved.
 // @license      All Rights Reserved
@@ -16,10 +16,9 @@
 // @noframes
 // ==/UserScript==
 
-
 (function () {
   'use strict';
- 
+
   /**
    * YouTube Ad Skipper
    * 
@@ -51,7 +50,9 @@
     let adStats = {
       blocked: 0,
       skipped: 0,
-      sessionStart: Date.now()
+      sessionStart: Date.now(),
+      timeSaved: 0
+      // Time saved in seconds
     };
     let lastAdSkipTime = 0;
     let adSkipCooldown = 2e3;
@@ -157,6 +158,47 @@
         debugLog("Restored video state");
       }
     }
+    function makeDraggable(element) {
+      let isDragging = false;
+      let currentX;
+      let currentY;
+      let initialX;
+      let initialY;
+      let xOffset = 0;
+      let yOffset = 0;
+      element.addEventListener("mousedown", dragStart);
+      document.addEventListener("mousemove", drag);
+      document.addEventListener("mouseup", dragEnd);
+      function dragStart(e) {
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
+        if (e.target === element || element.contains(e.target)) {
+          isDragging = true;
+          element.style.cursor = "grabbing";
+        }
+      }
+      function drag(e) {
+        if (isDragging) {
+          e.preventDefault();
+          currentX = e.clientX - initialX;
+          currentY = e.clientY - initialY;
+          xOffset = currentX;
+          yOffset = currentY;
+          setTranslate(currentX, currentY, element);
+        }
+      }
+      function dragEnd(e) {
+        if (isDragging) {
+          initialX = currentX;
+          initialY = currentY;
+          isDragging = false;
+          element.style.cursor = "move";
+        }
+      }
+      function setTranslate(xPos, yPos, el) {
+        el.style.transform = `translate(${xPos}px, ${yPos}px)`;
+      }
+    }
     function updateStats() {
       if (!settings.showStats) return;
       if (!document.getElementById("michroma-font")) {
@@ -172,8 +214,8 @@
         statsDiv.id = "yt-ad-skipper-stats";
         statsDiv.style.cssText = `
       position: fixed;
-      bottom: 20px;
-      right: 20px;
+      bottom: 80px;
+      right: 80px;
       background: rgba(0, 0, 0, 0.41);
       color: #fff;
       padding: 12px 18px;
@@ -184,14 +226,22 @@
       min-width: 160px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.39);
       backdrop-filter: blur(10px);
+      cursor: move;
+      user-select: none;
     `;
         document.body.appendChild(statsDiv);
+        makeDraggable(statsDiv);
       }
       const sessionTime = Math.floor((Date.now() - adStats.sessionStart) / 6e4);
       statsDiv.textContent = "";
-      const title = document.createElement("div");
-      title.style.cssText = "font-weight: bold; margin-bottom: 8px; font-size: 10px; letter-spacing: 0.5px;";
+      const title = document.createElement("a");
+      title.href = "https://github.com/gurveeer";
+      title.target = "_blank";
+      title.rel = "noopener noreferrer";
+      title.style.cssText = "font-weight: bold; margin-bottom: 8px; font-size: 10px; letter-spacing: 0.5px; color: #fff; text-decoration: none; display: block; cursor: pointer; transition: opacity 0.2s ease;";
       title.textContent = "🛡️ Ad Skipper @Gurveer";
+      title.onmouseover = () => title.style.opacity = "0.7";
+      title.onmouseout = () => title.style.opacity = "1";
       const blocked = document.createElement("div");
       blocked.style.cssText = "margin: 4px 0; letter-spacing: 0.3px; font-size: 8px;";
       blocked.textContent = `Blocked: ${adStats.blocked}`;
@@ -200,7 +250,10 @@
       skipped.textContent = `Skipped: ${adStats.skipped}`;
       const session = document.createElement("div");
       session.style.cssText = "margin: 4px 0; letter-spacing: 0.3px; font-size: 8px;";
-      session.textContent = `Session: ${sessionTime}m`;
+      const timeSavedMin = Math.floor(adStats.timeSaved / 60);
+      const timeSavedSec = adStats.timeSaved % 60;
+      const timeSavedStr = timeSavedMin > 0 ? `${timeSavedMin}m ${timeSavedSec}s` : `${timeSavedSec}s`;
+      session.textContent = `Session: ${sessionTime}m | Saved: ${timeSavedStr}`;
       statsDiv.appendChild(title);
       statsDiv.appendChild(blocked);
       statsDiv.appendChild(skipped);
@@ -334,6 +387,10 @@
         }
         if (skipBtn) {
           debugLog("Clicking skip button...");
+          const adTimeRemaining = videoPlayer.duration - videoPlayer.currentTime;
+          if (adTimeRemaining > 0 && !isNaN(adTimeRemaining)) {
+            adStats.timeSaved += Math.floor(adTimeRemaining);
+          }
           skipBtn.click();
           simulateTouch.call(skipBtn);
           adStats.skipped++;
@@ -347,6 +404,10 @@
           }
         } else if (videoPlayer.duration && videoPlayer.duration > 0 && !isNaN(videoPlayer.duration)) {
           debugLog(`Forcing ad end: current=${videoPlayer.currentTime}, duration=${videoPlayer.duration}`);
+          const adTimeRemaining = videoPlayer.duration - videoPlayer.currentTime;
+          if (adTimeRemaining > 0 && !isNaN(adTimeRemaining)) {
+            adStats.timeSaved += Math.floor(adTimeRemaining);
+          }
           videoPlayer.currentTime = videoPlayer.duration - 0.1;
           adStats.skipped++;
           updateStats();
@@ -622,5 +683,5 @@
       });
     }
   })();
- 
+
 })();
