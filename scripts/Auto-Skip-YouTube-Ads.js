@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Ad Skipper @ Gurveer
 // @namespace    https://github.com/gurveeer/browser-scripts/edit/master/scripts/Auto-Skip-YouTube-Ads.js
-// @version      9.0.1
+// @version      9.0.2
 // @author       Gurveer (@Gurveer)
 // @description  Instantly skips YouTube ads (skippable & non-skippable) and blocks ad elements. Features: customizable settings, statistics tracking, keyboard shortcuts. © 2025 Gurveer. All rights reserved.
 // @license      All Rights Reserved
@@ -19,22 +19,6 @@
 (function () {
   'use strict';
 
-  /**
-   * YouTube Ad Skipper
-   * 
-   * @author Gurveer (@Gurveer)
-   * @version 1.0.0
-   * @license All Rights Reserved
-   * @copyright 2025 Gurveer. All rights reserved.
-   * 
-   * This script automatically skips YouTube ads and blocks ad elements.
-   * Features:
-   * - Instant ad skipping (skippable and non-skippable)
-   * - Interface ad blocking
-   * - Customizable settings
-   * - Statistics tracking
-   * - Keyboard shortcuts (Ctrl+Shift+A for settings, Ctrl+Shift+S for stats)
-   */
   (function() {
     function loadSettings() {
       try {
@@ -44,6 +28,7 @@
         return {};
       }
     }
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768 || "ontouchstart" in window;
     let videoPlayer;
     let originalVolume = 1;
     let originalMuted = false;
@@ -52,18 +37,15 @@
       skipped: 0,
       sessionStart: Date.now(),
       timeSaved: 0
-      // Time saved in seconds
     };
     let lastAdSkipTime = 0;
-    let adSkipCooldown = 2e3;
+    let adSkipCooldown = isMobile ? 3e3 : 2e3;
     const settings = {
       autoUnmute: true,
       speedUpAds: false,
-      // Disabled by default for better compatibility
-      showStats: true,
-      showNotifications: true,
+      showStats: !isMobile,
+      showNotifications: !isMobile,
       debugMode: false,
-      // Disabled in production
       ...loadSettings()
     };
     const adSelectors = [
@@ -106,6 +88,7 @@
     }
     function showNotification(message, duration = 3e3) {
       if (!settings.showNotifications) return;
+      if (isMobile) return;
       if (!document.getElementById("michroma-font")) {
         const fontLink = document.createElement("link");
         fontLink.id = "michroma-font";
@@ -159,6 +142,7 @@
       }
     }
     function makeDraggable(element) {
+      if (isMobile) return;
       let isDragging = false;
       let currentX;
       let currentY;
@@ -201,6 +185,7 @@
     }
     function updateStats() {
       if (!settings.showStats) return;
+      if (isMobile) return;
       if (!document.getElementById("michroma-font")) {
         const fontLink = document.createElement("link");
         fontLink.id = "michroma-font";
@@ -219,6 +204,7 @@
       background: rgba(0, 0, 0, 0.41);
       color: #fff;
       padding: 12px 18px;
+      padding-top: 8px;
       border-radius: 8px;
       font-family: 'Michroma', sans-serif;
       font-size: 11px;
@@ -234,6 +220,35 @@
       }
       const sessionTime = Math.floor((Date.now() - adStats.sessionStart) / 6e4);
       statsDiv.textContent = "";
+      const closeBtn = document.createElement("button");
+      closeBtn.textContent = "×";
+      closeBtn.style.cssText = `
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 0;
+      width: 20px;
+      height: 20px;
+      line-height: 18px;
+      text-align: center;
+      opacity: 0.6;
+      transition: opacity 0.2s ease;
+      font-family: Arial, sans-serif;
+    `;
+      closeBtn.onmouseover = () => closeBtn.style.opacity = "1";
+      closeBtn.onmouseout = () => closeBtn.style.opacity = "0.6";
+      closeBtn.onclick = (e) => {
+        e.stopPropagation();
+        settings.showStats = false;
+        saveSettings();
+        statsDiv.remove();
+        showNotification("📊 Stats hidden (Ctrl+Shift+S to show)", 2e3);
+      };
       const title = document.createElement("a");
       title.href = "https://github.com/gurveeer";
       title.target = "_blank";
@@ -254,6 +269,7 @@
       const timeSavedSec = adStats.timeSaved % 60;
       const timeSavedStr = timeSavedMin > 0 ? `${timeSavedMin}m ${timeSavedSec}s` : `${timeSavedSec}s`;
       session.textContent = `Session: ${sessionTime}m | Saved: ${timeSavedStr}`;
+      statsDiv.appendChild(closeBtn);
       statsDiv.appendChild(title);
       statsDiv.appendChild(blocked);
       statsDiv.appendChild(skipped);
@@ -447,9 +463,55 @@
       const observer = new MutationObserver(checkAndSkipAds);
       observer.observe(target, config);
       debugLog("Player ad blocker started successfully");
-      setInterval(checkAndSkipAds, 2e3);
+      const checkInterval = isMobile ? 3e3 : 2e3;
+      setInterval(checkAndSkipAds, checkInterval);
+    }
+    function createMobileSettingsButton() {
+      if (!isMobile) return;
+      const settingsBtn = document.createElement("button");
+      settingsBtn.id = "yt-ad-skipper-mobile-btn";
+      settingsBtn.innerHTML = "⚙️";
+      settingsBtn.style.cssText = `
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      font-size: 20px;
+      cursor: pointer;
+      z-index: 999997;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    `;
+      settingsBtn.onclick = () => {
+        const panel = document.getElementById("yt-ad-skipper-settings");
+        const backdrop = document.getElementById("yt-ad-skipper-backdrop");
+        if (panel && backdrop) {
+          panel.style.display = "block";
+          backdrop.style.display = "block";
+        }
+      };
+      settingsBtn.ontouchstart = () => {
+        settingsBtn.style.transform = "scale(0.9)";
+        settingsBtn.style.background = "rgba(255, 0, 0, 0.8)";
+      };
+      settingsBtn.ontouchend = () => {
+        settingsBtn.style.transform = "scale(1)";
+        settingsBtn.style.background = "rgba(0, 0, 0, 0.7)";
+      };
+      document.body.appendChild(settingsBtn);
+      debugLog("Mobile settings button created");
     }
     function createSettingsPanel() {
+      if (document.getElementById("yt-ad-skipper-backdrop")) return;
       if (!document.getElementById("michroma-font")) {
         const fontLink = document.createElement("link");
         fontLink.id = "michroma-font";
@@ -487,8 +549,10 @@
     box-shadow: 0 8px 32px rgba(0,0,0,0.6);
     backdrop-filter: blur(10px);
     display: none;
-    min-width: 320px;
-    max-width: 420px;
+    min-width: ${isMobile ? "280px" : "320px"};
+    max-width: ${isMobile ? "90vw" : "420px"};
+    max-height: ${isMobile ? "80vh" : "auto"};
+    overflow-y: auto;
   `;
       const title = document.createElement("h3");
       title.style.cssText = "margin: 0 0 20px 0; font-size: 16px; letter-spacing: 1px; text-align: center;";
@@ -503,12 +567,16 @@
       ];
       options.forEach((opt) => {
         const label = document.createElement("label");
-        label.style.cssText = "display: block; margin: 12px 0; cursor: pointer; font-size: 11px; letter-spacing: 0.3px;";
+        label.style.cssText = `display: block; margin: ${isMobile ? "16px" : "12px"} 0; cursor: pointer; font-size: 11px; letter-spacing: 0.3px; padding: ${isMobile ? "8px" : "0"}; border-radius: 4px; transition: background 0.2s ease;`;
+        if (isMobile) {
+          label.ontouchstart = () => label.style.background = "rgba(255, 255, 255, 0.1)";
+          label.ontouchend = () => label.style.background = "transparent";
+        }
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.id = opt.id;
         checkbox.checked = opt.checked;
-        checkbox.style.cssText = "margin-right: 8px; cursor: pointer;";
+        checkbox.style.cssText = `margin-right: 8px; cursor: pointer; ${isMobile ? "width: 18px; height: 18px;" : ""}`;
         label.appendChild(checkbox);
         label.appendChild(document.createTextNode(" " + opt.label));
         panel.appendChild(label);
@@ -518,17 +586,18 @@
       saveBtn.textContent = "Save Settings";
       saveBtn.style.cssText = `
     margin-top: 20px;
-    padding: 10px 18px;
+    padding: ${isMobile ? "14px 18px" : "10px 18px"};
     background: rgba(255, 0, 0, 0.8);
     color: #fff;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-family: 'Michroma', sans-serif;
-    font-size: 11px;
+    font-size: ${isMobile ? "12px" : "11px"};
     letter-spacing: 0.5px;
     width: 100%;
     transition: background 0.3s ease;
+    touch-action: manipulation;
   `;
       saveBtn.onmouseover = () => saveBtn.style.background = "rgba(255, 0, 0, 1)";
       saveBtn.onmouseout = () => saveBtn.style.background = "rgba(255, 0, 0, 0.8)";
@@ -538,17 +607,18 @@
       closeBtn.textContent = "Close";
       closeBtn.style.cssText = `
     margin-top: 10px;
-    padding: 10px 18px;
+    padding: ${isMobile ? "14px 18px" : "10px 18px"};
     background: rgba(96, 96, 96, 0.8);
     color: #fff;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-family: 'Michroma', sans-serif;
-    font-size: 11px;
+    font-size: ${isMobile ? "12px" : "11px"};
     letter-spacing: 0.5px;
     width: 100%;
     transition: background 0.3s ease;
+    touch-action: manipulation;
   `;
       closeBtn.onmouseover = () => closeBtn.style.background = "rgba(96, 96, 96, 1)";
       closeBtn.onmouseout = () => closeBtn.style.background = "rgba(96, 96, 96, 0.8)";
@@ -605,34 +675,6 @@
         }
       });
     }
-    function initialize() {
-      debugLog("========================================");
-      debugLog("Initializing YouTube Ad Skipper v1.0.0");
-      debugLog("Author: Gurveer (@Gurveer)");
-      debugLog("========================================");
-      createAdBlockStyle("adBlockStyle");
-      blockPlayerAds("playerAdBlock");
-      createSettingsPanel();
-      addKeyboardShortcuts();
-      updateStats();
-      setTimeout(checkAndSkipAds, 1e3);
-      setInterval(() => {
-        if (settings.showStats) {
-          const blockedAds = document.querySelectorAll(adSelectors.join(","));
-          adStats.blocked = blockedAds.length;
-          updateStats();
-        }
-      }, 5e3);
-      debugLog("YouTube Ad Skipper initialized successfully");
-      debugLog("Press Ctrl+Shift+A to open settings");
-      showNotification("🛡️ Ad Skipper Active", 3e3);
-    }
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initialize);
-      debugLog("YouTube ad skipper scheduled");
-    } else {
-      initialize();
-    }
     function resumeAndClear() {
       const video = document.querySelector("video.html5-main-video");
       if (video == null ? void 0 : video.paused) {
@@ -662,25 +704,60 @@
         debugLog("Error clearing popup: " + error.message);
       }
     }
-    const popupObserver = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.type === "childList") {
-          Array.from(mutation.addedNodes).filter((node) => node.nodeType === 1).forEach((node) => clearPopup(node));
+    function start() {
+      debugLog("========================================");
+      debugLog("Initializing YouTube Ad Skipper v1.0.0");
+      debugLog("Author: Gurveer (@Gurveer)");
+      debugLog(`Device: ${isMobile ? "Mobile" : "Desktop"}`);
+      debugLog("========================================");
+      createAdBlockStyle("adBlockStyle");
+      blockPlayerAds("playerAdBlock");
+      createSettingsPanel();
+      createMobileSettingsButton();
+      addKeyboardShortcuts();
+      updateStats();
+      setTimeout(checkAndSkipAds, 1e3);
+      const statsUpdateInterval = isMobile ? 1e4 : 5e3;
+      setInterval(() => {
+        if (settings.showStats && !isMobile) {
+          const blockedAds = document.querySelectorAll(adSelectors.join(","));
+          adStats.blocked = blockedAds.length;
+          updateStats();
         }
+      }, statsUpdateInterval);
+      const popupObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === "childList") {
+            Array.from(mutation.addedNodes).filter((node) => node.nodeType === 1).forEach((node) => clearPopup(node));
+          }
+        });
       });
-    });
-    if (document.body) {
-      popupObserver.observe(document.body, {
-        childList: true,
-        subtree: true
-      });
-    } else {
-      document.addEventListener("DOMContentLoaded", () => {
+      if (document.body) {
         popupObserver.observe(document.body, {
           childList: true,
           subtree: true
         });
-      });
+      } else {
+        document.addEventListener("DOMContentLoaded", () => {
+          popupObserver.observe(document.body, {
+            childList: true,
+            subtree: true
+          });
+        });
+      }
+      debugLog("YouTube Ad Skipper initialized successfully");
+      debugLog("Press Ctrl+Shift+A to open settings");
+      if (isMobile) {
+        debugLog("Mobile optimizations enabled");
+      } else {
+        showNotification("🛡️ Ad Skipper Active", 3e3);
+      }
+    }
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", start);
+      debugLog("YouTube ad skipper scheduled");
+    } else {
+      start();
     }
   })();
 
